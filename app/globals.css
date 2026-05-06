@@ -1,26 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg:#F5F0E8; --surface:#FFFFFF; --surface-2:#EEE8D8; --surface-3:#E4DCCA;
+  --border:#DDD5BC; --border-strong:#C8BC9C;
+  --text:#18140F; --text-2:#45392E; --text-3:#7A6E62;
+  --accent:#1B4332; --accent-light:#2D6A4F; --accent-soft:#DCF0E5;
+  --positive:#2D6A4F; --negative:#C0381E;
+  --gold:#9A6E1E; --gold-soft:#F8EDD4;
+  --shadow:0 1px 3px rgba(26,22,18,0.06), 0 4px 12px rgba(26,22,18,0.06);
+  --shadow-md:0 2px 8px rgba(26,22,18,0.07), 0 8px 24px rgba(26,22,18,0.08);
+  --shadow-lg:0 4px 16px rgba(26,22,18,0.08), 0 16px 40px rgba(26,22,18,0.10);
+  --radius:16px; --radius-sm:10px;
+  --transition:.2s cubic-bezier(.4,0,.2,1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; line-height: 1.5; }
+.mono { font-family: 'JetBrains Mono', monospace; font-feature-settings: "tnum"; }
+.serif { font-family: 'Fraunces', serif; }

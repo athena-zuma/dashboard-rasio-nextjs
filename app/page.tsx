@@ -1,65 +1,93 @@
-import Image from "next/image";
+'use client'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
 
-export default function Home() {
+export default function LoginPage() {
+  const router = useRouter()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      setError(error.message)
+      setLoading(false)
+    } else {
+      router.push('/dashboard')
+    }
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div style={{
+      minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'linear-gradient(135deg,#1B4332 0%,#2D6A4F 40%,#1a3a2a 100%)',
+      position: 'relative', overflow: 'hidden', padding: '24px',
+    }}>
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse at 70% 30%,rgba(168,124,42,0.15) 0%,transparent 60%), radial-gradient(ellipse at 20% 80%,rgba(44,74,138,0.1) 0%,transparent 50%)',
+      }} />
+      <div style={{
+        background: 'rgba(255,255,255,0.97)', borderRadius: 24,
+        border: '1px solid rgba(255,255,255,0.6)',
+        padding: '52px 44px', width: '100%', maxWidth: 440,
+        boxShadow: '0 8px 48px rgba(0,0,0,0.25)', position: 'relative', zIndex: 1,
+      }}>
+        <div style={{
+          width: 52, height: 52, borderRadius: 14, marginBottom: 28,
+          background: 'linear-gradient(135deg,#1B4332,#2D6A4F)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 4px 16px rgba(27,67,50,0.3)',
+        }}>
+          <span style={{ color: 'white', fontFamily: 'var(--font-fraunces)', fontSize: 18, fontWeight: 700 }}>DDD</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+
+        <h1 style={{ fontFamily: 'var(--font-fraunces)', fontSize: 30, fontWeight: 700, marginBottom: 6 }}>
+          Rasio Keuangan
+        </h1>
+        <p style={{ color: 'var(--text-3)', fontSize: 14, marginBottom: 36, lineHeight: 1.6 }}>
+          Zuma Indonesia Group · Analisa Neraca & Laba Rugi
+        </p>
+
+        <form onSubmit={handleLogin}>
+          {(['email','password'] as const).map((field) => (
+            <div key={field} style={{ marginBottom: 18 }}>
+              <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text-2)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '.5px' }}>
+                {field === 'email' ? 'Email' : 'Password'}
+              </label>
+              <input
+                type={field} required
+                value={field === 'email' ? email : password}
+                onChange={e => field === 'email' ? setEmail(e.target.value) : setPassword(e.target.value)}
+                placeholder={field === 'email' ? 'email@zuma.co.id' : '••••••••'}
+                style={{
+                  width: '100%', padding: '13px 16px', border: '1.5px solid var(--border)',
+                  borderRadius: 10, fontSize: 15, background: 'var(--bg)',
+                  color: 'var(--text)', outline: 'none',
+                }}
+              />
+            </div>
+          ))}
+
+          {error && <p style={{ color: 'var(--negative)', fontSize: 13, marginBottom: 8 }}>{error}</p>}
+
+          <button type="submit" disabled={loading} style={{
+            width: '100%', padding: 15, marginTop: 8,
+            background: 'linear-gradient(135deg,#1B4332,#2D6A4F)',
+            color: 'white', border: 'none', borderRadius: 10,
+            fontSize: 15, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer',
+            opacity: loading ? .7 : 1, boxShadow: '0 4px 16px rgba(27,67,50,0.25)',
+          }}>
+            {loading ? 'Masuk...' : 'Masuk'}
+          </button>
+        </form>
+      </div>
     </div>
-  );
+  )
 }
