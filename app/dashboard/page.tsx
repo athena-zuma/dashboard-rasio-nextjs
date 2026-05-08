@@ -16,7 +16,7 @@ interface PeriodeData {
 const MONTHS = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des']
 
 function periodLabel(p: string) {
-  const y = p.slice(0,4), m = parseInt(p.slice(4,6))
+  const y = p.slice(0,4), m = parseInt(p.slice(5,7))
   return `${MONTHS[m-1]} ${y}`
 }
 
@@ -46,7 +46,7 @@ export default function DashboardPage() {
     while (true) {
       const { data, error } = await supabase
         .from('ringkasan-bukubesar-ddd')
-        .select('kode,saldo_akhir,debet,kredit,periode')
+        .select('kode,saldo_akhir,debet,kredit,periode_akhir')
         .range(from, from + pageSize - 1)
       if (error || !data || data.length === 0) break
       allRows.push(...data)
@@ -55,8 +55,8 @@ export default function DashboardPage() {
     }
     const grouped: Record<string, FinancialRow[]> = {}
     for (const r of allRows) {
-      if (!grouped[r.periode]) grouped[r.periode] = []
-      grouped[r.periode].push(r)
+      if (!grouped[r.periode_akhir]) grouped[r.periode_akhir] = []
+      grouped[r.periode_akhir].push(r)
     }
     const periods = Object.keys(grouped).sort()
     const last6 = new Set(periods.slice(-6))

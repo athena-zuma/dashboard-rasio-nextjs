@@ -3,7 +3,7 @@ export interface FinancialRow {
   saldo_akhir: number
   debet: number
   kredit: number
-  periode: string
+  periode_akhir: string
 }
 
 export interface Financials {
